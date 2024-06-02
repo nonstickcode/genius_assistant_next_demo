@@ -5,7 +5,7 @@ import { requireEnvValue } from "@/lib/core";
 const ACCESS_TOKEN = requireEnvValue("NEXT_PUBLIC_GENIUS_CLIENT_ACCESS_TOKEN");
 
 export async function GET(req: NextRequest) {
-  console.log("ACCESS_TOKEN:", ACCESS_TOKEN); // Log the access token to verify it is being read correctly
+  // console.log("ACCESS_TOKEN:", ACCESS_TOKEN); // Log the access token to verify it is being read correctly
 
   const { searchParams } = new URL(req.url);
   const artistName = searchParams.get("artistName");

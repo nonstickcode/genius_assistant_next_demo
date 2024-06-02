@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons';
-import button from '../button';
+import { Button } from './ui/button';
 
 interface LyricsModalProps {
   show: boolean;
@@ -52,27 +52,27 @@ const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, son
         </div>
         <div className="flex justify-between mt-4">
           <div className="flex">
-            <button
+            <Button
               onClick={copyLyricsToClipboard}
               className="bg-blue-500 hover:bg-blue-600 mr-2"
             >
               <FontAwesomeIcon icon={faCopy} />
               <span className="ml-2">Copy</span>
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={downloadLyrics}
               className="bg-green-500 hover:bg-green-600 mr-2"
             >
               <FontAwesomeIcon icon={faDownload} />
               <span className="ml-2">Download Lyrics</span>
-            </button>
+            </Button>
           </div>
-          <button
+          <Button
             onClick={onClose}
             className="bg-red-500 hover:bg-red-600"
           >
             Close
-          </button>
+          </Button>
         </div>
       </div>
     </div>

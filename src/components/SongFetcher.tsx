@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMusic, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import LyricsModal from './LyricsModal';
+import { Button } from './ui/button';
 
 const SongFetcher: React.FC = () => {
   const [artistName, setArtistName] = useState('');
@@ -56,7 +57,7 @@ const SongFetcher: React.FC = () => {
         onChange={(e) => setSongTitle(e.target.value)}
         className="p-2 border text-black font-bold rounded"
       />
-      <button
+      <Button
         onClick={handleFetchLyrics}
         className={cx(
           "bg-purple-500 hover:bg-purple-600 flex gap-2 items-center justify-center p-2 rounded",
@@ -70,7 +71,7 @@ const SongFetcher: React.FC = () => {
         <span>
           {fetchingLyrics ? "Fetching Lyrics..." : "Fetch Lyrics"}
         </span>
-      </button>
+      </Button>
       {error && <p className="text-red-500">{error}</p>}
       
       <LyricsModal
