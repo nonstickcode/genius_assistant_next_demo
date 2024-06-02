@@ -12,6 +12,8 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "classnames": "^2.5.1",
+    "genius": "^0.0.2",
+    "genius-lyrics": "^4.4.7",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"

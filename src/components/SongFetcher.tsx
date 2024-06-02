@@ -4,18 +4,40 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMusic, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
+import LyricsModal from './LyricsModal';
 
-interface SongFetcherProps {
-  onFetchLyrics: (artistName: string, songTitle: string) => void;
-  fetchingLyrics: boolean;
-}
-
-const SongFetcher: React.FC<SongFetcherProps> = ({ onFetchLyrics, fetchingLyrics }) => {
+const SongFetcher: React.FC = () => {
   const [artistName, setArtistName] = useState('');
   const [songTitle, setSongTitle] = useState('');
+  const [fetchingLyrics, setFetchingLyrics] = useState(false);
+  const [lyrics, setLyrics] = useState<string[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [showLyricsModal, setShowLyricsModal] = useState(false);
 
-  const handleFetchLyrics = () => {
-    onFetchLyrics(artistName, songTitle);
+  const handleFetchLyrics = async () => {
+    if (!artistName || !songTitle) {
+      setError("Both artist name and song title are required.");
+      return;
+    }
+
+    setFetchingLyrics(true);
+    setError(null);
+    setLyrics(null);
+    try {
+      const response = await fetch(`/api/genius?artistName=${encodeURIComponent(artistName)}&songTitle=${encodeURIComponent(songTitle)}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setLyrics(data.lyrics);
+        setShowLyricsModal(true);
+      } else {
+        setError(data.error || 'Failed to fetch lyrics');
+      }
+    } catch (err) {
+      setError('Failed to fetch lyrics');
+    } finally {
+      setFetchingLyrics(false);
+    }
   };
 
   return (
@@ -49,6 +71,15 @@ const SongFetcher: React.FC<SongFetcherProps> = ({ onFetchLyrics, fetchingLyrics
           {fetchingLyrics ? "Fetching Lyrics..." : "Fetch Lyrics"}
         </span>
       </button>
+      {error && <p className="text-red-500">{error}</p>}
+      
+      <LyricsModal
+        show={showLyricsModal}
+        lyrics={lyrics || []}
+        artistName={artistName}
+        songTitle={songTitle}
+        onClose={() => setShowLyricsModal(false)}
+      />
     </div>
   );
 };
