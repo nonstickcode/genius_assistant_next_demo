@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
+import Alert from '@/components/Alert'; // Adjust the import path according to your project structure
 
 interface LyricsModalProps {
   show: boolean;
@@ -12,7 +13,7 @@ interface LyricsModalProps {
 }
 
 const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, songTitle, onClose }) => {
-  if (!show) return null;
+  const [alertVisible, setAlertVisible] = useState(false);
 
   const downloadLyrics = () => {
     const element = document.createElement("a");
@@ -28,12 +29,14 @@ const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, son
     navigator.clipboard
       .writeText(textToCopy)
       .then(() => {
-        alert("Lyrics copied to clipboard!");
+        setAlertVisible(true);
       })
       .catch((err) => {
         console.error("Failed to copy lyrics: ", err);
       });
   };
+
+  if (!show) return null;
 
   return (
     <div
@@ -41,7 +44,7 @@ const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, son
       onClick={onClose}
     >
       <div
-        className="bg-white p-8 rounded-lg max-w-4xl w-full mx-auto"
+        className="bg-white p-8 rounded-lg max-w-4xl w-full mx-auto relative"
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
       >
         <h2 className="text-3xl mb-4 font-bold text-black">{`Lyrics: ${artistName} - ${songTitle}`}</h2>
@@ -50,12 +53,18 @@ const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, son
             <p key={index}>{line}</p>
           ))}
         </div>
-        <div className="flex justify-between mt-4">
-          <div className="flex">
+        <div className="flex justify-between mt-4 relative">
+          <div className="flex relative">
+            {alertVisible && (
+              <Alert
+                message="Lyrics copied to clipboard!"
+                onClose={() => setAlertVisible(false)}
+              />
+            )}
             <Button
               onClick={copyLyricsToClipboard}
               variant="default"
-              className="bg-blue-500 hover:bg-blue-600 mr-2 "
+              className="bg-blue-500 hover:bg-blue-600 mr-2 relative"
             >
               <FontAwesomeIcon icon={faCopy} />
               <span className="ml-2">Copy</span>
