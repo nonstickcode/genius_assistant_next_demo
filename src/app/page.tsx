@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import Head from 'next/head';
+import { useState } from 'react';
 import SongFetcher from '@/components/SongFetcher';
 import LyricsModal from '@/components/LyricsModal';
 
@@ -16,7 +16,7 @@ const Page = () => {
     setFetchingLyrics(true);
     setArtistName(artistName);
     setSongTitle(songTitle);
-    // Fetch the lyrics from Genius API
+
     try {
       const response = await fetch(`/api/genius?artistName=${encodeURIComponent(artistName)}&songTitle=${encodeURIComponent(songTitle)}`);
       const data = await response.json();
@@ -37,12 +37,12 @@ const Page = () => {
   return (
     <div>
       <Head>
-        <title>Fetch Lyrics</title>
+        <title>{artistName && songTitle ? `${artistName} - ${songTitle}` : "Fetch Lyrics"}</title>
         <meta name="description" content="Fetch song lyrics from Genius API" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Fetch Lyrics</h1>
+        <h1 className="text-2xl font-bold mb-4">Fetch One Songs Lyrics</h1>
         <SongFetcher onFetchLyrics={handleFetchLyrics} fetchingLyrics={fetchingLyrics} />
         {lyrics && (
           <LyricsModal
