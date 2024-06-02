@@ -3,18 +3,35 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import SongFetcher from '@/components/SongFetcher';
+import LyricsModal from '@/components/LyricsModal';
 
 const Page = () => {
   const [fetchingLyrics, setFetchingLyrics] = useState(false);
+  const [lyrics, setLyrics] = useState<string[] | null>(null);
+  const [artistName, setArtistName] = useState<string>('');
+  const [songTitle, setSongTitle] = useState<string>('');
+  const [showLyricsModal, setShowLyricsModal] = useState(false);
 
-  const handleFetchLyrics = (artistName: string, songTitle: string) => {
+  const handleFetchLyrics = async (artistName: string, songTitle: string) => {
     setFetchingLyrics(true);
-    // Add your logic to fetch lyrics here
-    // Simulating an API call with setTimeout
-    setTimeout(() => {
+    setArtistName(artistName);
+    setSongTitle(songTitle);
+    // Fetch the lyrics from Genius API
+    try {
+      const response = await fetch(`/api/genius?artistName=${encodeURIComponent(artistName)}&songTitle=${encodeURIComponent(songTitle)}`);
+      const data = await response.json();
+      if (response.ok) {
+        setLyrics(data.lyrics);
+        setShowLyricsModal(true);
+      } else {
+        setLyrics(null);
+        console.error(data.error);
+      }
+    } catch (error) {
+      console.error('Failed to fetch lyrics:', error);
+    } finally {
       setFetchingLyrics(false);
-      alert(`Fetched lyrics for ${artistName} - ${songTitle}`);
-    }, 2000);
+    }
   };
 
   return (
@@ -27,6 +44,15 @@ const Page = () => {
       <main className="p-4">
         <h1 className="text-2xl font-bold mb-4">Fetch Lyrics</h1>
         <SongFetcher onFetchLyrics={handleFetchLyrics} fetchingLyrics={fetchingLyrics} />
+        {lyrics && (
+          <LyricsModal
+            show={showLyricsModal}
+            lyrics={lyrics}
+            artistName={artistName}
+            songTitle={songTitle}
+            onClose={() => setShowLyricsModal(false)}
+          />
+        )}
       </main>
     </div>
   );
