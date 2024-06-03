@@ -35,7 +35,7 @@ const Page = () => {
   };
 
   return (
-    <div>
+    <div className="flex">
       <Head>
         <title>{artistName && songTitle ? `${artistName} - ${songTitle}` : "Fetch Lyrics"}</title>
         <meta name="description" content="Fetch song lyrics from Genius API" />
