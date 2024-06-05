@@ -49,12 +49,12 @@ const Page = () => {
     }
   };
 
-  const handleFetchTopSongs = async (artistName: string) => {
+  const handleFetchTopSongs = async (artistName: string, numberOfSongs: number) => {
     setFetchingSongs(true);
     setArtistName(artistName);
 
     try {
-      const response = await fetch(`/api/genius/fetch-top-songs?artistName=${encodeURIComponent(artistName)}`);
+      const response = await fetch(`/api/genius/fetch-top-songs?artistName=${encodeURIComponent(artistName)}&numberOfSongs=${numberOfSongs}`);
       const data = await response.json();
       if (response.ok) {
         setTopSongs(data.topSongs);

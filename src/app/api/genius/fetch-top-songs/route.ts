@@ -1,15 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import { requireEnvValue } from "@/lib/core";
+import { NextRequest, NextResponse } from 'next/server';
+import { requireEnvValue } from '@/lib/core';
 
-const ACCESS_TOKEN = requireEnvValue("NEXT_PUBLIC_GENIUS_CLIENT_ACCESS_TOKEN");
+const ACCESS_TOKEN = requireEnvValue('NEXT_PUBLIC_GENIUS_CLIENT_ACCESS_TOKEN');
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const artistName = searchParams.get("artistName");
+  const artistName = searchParams.get('artistName');
+  const numberOfSongs = parseInt(searchParams.get('numberOfSongs')) || 20; // Default to 20 songs if not provided
 
   if (!artistName) {
     return NextResponse.json(
-      { error: "artistName parameter is required" },
+      { error: 'artistName parameter is required' },
       { status: 400 }
     );
   }
@@ -26,13 +27,13 @@ export async function GET(req: NextRequest) {
     const artist = artistSearchData.response.hits.find(hit => hit.result.primary_artist.name.toLowerCase() === artistName.toLowerCase());
 
     if (!artist) {
-      return NextResponse.json({ error: "Artist not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Artist not found' }, { status: 404 });
     }
 
     const artistId = artist.result.primary_artist.id;
 
     // Fetch top songs for the artist
-    const songsResponse = await fetch(`https://api.genius.com/artists/${artistId}/songs?sort=popularity&per_page=20`, {
+    const songsResponse = await fetch(`https://api.genius.com/artists/${artistId}/songs?sort=popularity&per_page=${numberOfSongs}`, {
       headers: {
         Authorization: `Bearer ${ACCESS_TOKEN}`
       }

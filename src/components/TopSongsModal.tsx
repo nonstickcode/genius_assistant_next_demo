@@ -15,6 +15,10 @@ interface TopSongsModalProps {
   onClose: () => void;
 }
 
+const capitalize = (str: string) => {
+  return str.replace(/\b\w/g, char => char.toUpperCase());
+};
+
 const TopSongsModal: React.FC<TopSongsModalProps> = ({ show, topSongs, artistName, onSongClick, loadingSongTitle, onClose }) => {
   const [alertVisible, setAlertVisible] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -22,7 +26,7 @@ const TopSongsModal: React.FC<TopSongsModalProps> = ({ show, topSongs, artistNam
   const downloadTopSongsLyrics = async () => {
     setIsDownloading(true);
     const zip = new JSZip();
-    const lyricsFolder = zip.folder(`${artistName} Top Song Lyrics`);
+    const lyricsFolder = zip.folder(`${capitalize(artistName)} Top Song Lyrics`);
 
     try {
       await Promise.all(
@@ -35,7 +39,7 @@ const TopSongsModal: React.FC<TopSongsModalProps> = ({ show, topSongs, artistNam
       );
 
       const content = await zip.generateAsync({ type: "blob" });
-      saveAs(content, `${artistName} Top Songs Lyrics.zip`);
+      saveAs(content, `${capitalize(artistName)} Top Songs Lyrics.zip`);
     } catch (error) {
       console.error('Failed to fetch lyrics for all songs: ', error);
     } finally {
@@ -44,7 +48,7 @@ const TopSongsModal: React.FC<TopSongsModalProps> = ({ show, topSongs, artistNam
   };
 
   const copyTopSongsToClipboard = () => {
-    const textToCopy = topSongs.map(song => song.title).join("\n");
+    const textToCopy = topSongs.map((song, index) => `${index + 1}. ${song.title}`).join("\n");
     navigator.clipboard
       .writeText(textToCopy)
       .then(() => {
@@ -66,13 +70,26 @@ const TopSongsModal: React.FC<TopSongsModalProps> = ({ show, topSongs, artistNam
         className="bg-white p-8 rounded-lg max-w-4xl w-full mx-auto relative"
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
       >
-        <h2 className="text-3xl mb-4 font-bold text-black">{`Top 10 Songs by ${artistName}`}</h2>
+        <h2 className="text-3xl mb-4 font-bold text-black">{`Top ${topSongs.length} Songs by ${capitalize(artistName)}`}</h2>
         <div className="overflow-y-auto max-h-96 text-black text-lg">
           {topSongs.map((song, index) => (
-            <p key={index} className="text-blue-500 hover:underline cursor-pointer" onClick={() => onSongClick(song.title)}>
-              {loadingSongTitle === song.title ? <FontAwesomeIcon icon={faSpinner} className="animate-spin mr-2" /> : null}
-              {song.title}
-            </p>
+            <div key={index} className="flex items-center">
+              {loadingSongTitle === song.title ? (
+                <div className="w-8 flex justify-end mr-4">
+                  <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
+                </div>
+              ) : (
+                <div className="w-8 flex justify-end mr-2">
+                  <span className="text-black">{index + 1}.</span>
+                </div>
+              )}
+              <p
+                className="text-blue-500 hover:underline cursor-pointer flex-grow"
+                onClick={() => onSongClick(song.title)}
+              >
+                {song.title}
+              </p>
+            </div>
           ))}
         </div>
         <div className="flex justify-between mt-4 relative">

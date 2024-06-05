@@ -6,24 +6,22 @@ import { faMusic, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
 
 interface ArtistTopSongsFetcherProps {
-  onFetchTopSongs: (artistName: string) => void;
+  onFetchTopSongs: (artistName: string, numberOfSongs: number) => void;
   fetchingSongs: boolean;
 }
 
 const ArtistTopSongsFetcher: React.FC<ArtistTopSongsFetcherProps> = ({ onFetchTopSongs, fetchingSongs }) => {
   const [artistName, setArtistName] = useState('');
+  const [numberOfSongs, setNumberOfSongs] = useState(20); // Default to 20 songs
 
   const handleFetchTopSongs = () => {
-    onFetchTopSongs(artistName);
+    onFetchTopSongs(artistName, numberOfSongs);
   };
 
   return (
-    <>
-    
     <div className="flex items-center justify-center h-screen">
-      
-      <div className="flex flex-col gap-4 w-120">
-      <h1 className="text-2xl font-bold mb-4">Fetch the Top Songs for an Artist</h1>
+      <div className="flex flex-col gap-4 w-80">
+        <h1 className="text-2xl font-bold mb-4">Fetch the Top Songs for an Artist</h1>
         <input
           type="text"
           placeholder="Artist Name"
@@ -31,6 +29,17 @@ const ArtistTopSongsFetcher: React.FC<ArtistTopSongsFetcherProps> = ({ onFetchTo
           onChange={(e) => setArtistName(e.target.value)}
           className="p-2 border border-white text-white bg-black font-bold rounded w-full"
         />
+        <select
+          value={numberOfSongs}
+          onChange={(e) => setNumberOfSongs(parseInt(e.target.value))}
+          className="p-2 border border-white text-white bg-black font-bold rounded w-full"
+        >
+          {[5, 10, 20, 30, 40, 50].map((num) => (
+            <option key={num} value={num}>
+              {num}
+            </option>
+          ))}
+        </select>
         <Button
           onClick={handleFetchTopSongs}
           size="lg"
@@ -51,7 +60,6 @@ const ArtistTopSongsFetcher: React.FC<ArtistTopSongsFetcherProps> = ({ onFetchTo
         </Button>
       </div>
     </div>
-    </>
   );
 };
 
