@@ -18,17 +18,18 @@ const ArtistTopSongsFetcher: React.FC<ArtistTopSongsFetcherProps> = ({ onFetchTo
   };
 
   return (
-    <div className="mt-5 flex flex-col gap-4">
+    <div className="mt-5 flex flex-col  p-4 gap-4">
       <input
         type="text"
         placeholder="Artist Name"
         value={artistName}
         onChange={(e) => setArtistName(e.target.value)}
-        className="p-2 border text-black font-bold rounded"
+        className="p-2 border border-white text-white bg-black font-bold rounded"
       />
       <Button
         onClick={handleFetchTopSongs}
         size="lg"
+        className="bg-white text-black hover:bg-gray-300"
         disabled={fetchingSongs}
       >
         {fetchingSongs ? (

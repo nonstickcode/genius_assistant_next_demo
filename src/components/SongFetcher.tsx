@@ -25,18 +25,19 @@ const SongFetcher: React.FC<SongFetcherProps> = ({ onFetchLyrics, fetchingLyrics
         placeholder="Artist Name"
         value={artistName}
         onChange={(e) => setArtistName(e.target.value)}
-        className="p-2 border text-black font-bold rounded"
+        className="p-2 border border-white text-white bg-black font-bold rounded"
       />
       <input
         type="text"
         placeholder="Song Title"
         value={songTitle}
         onChange={(e) => setSongTitle(e.target.value)}
-        className="p-2 border text-black font-bold rounded"
+        className="p-2 border border-white text-white bg-black font-bold rounded"
       />
       <Button
         onClick={handleFetchLyrics}
         size="lg"
+        className="bg-white text-black hover:bg-gray-300"
         disabled={fetchingLyrics}
       >
         {fetchingLyrics ? (

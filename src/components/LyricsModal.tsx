@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
-import Alert from '@/components/Alert';
+import TooltipAlert from '@/components/TooltipAlert';
 
 interface LyricsModalProps {
   show: boolean;
@@ -67,7 +67,7 @@ const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, son
         <div className="flex justify-between mt-4 relative">
           <div className="flex relative">
             {alertVisible && (
-              <Alert
+              <TooltipAlert
                 message="Lyrics copied to clipboard!"
                 onClose={() => setAlertVisible(false)}
               />

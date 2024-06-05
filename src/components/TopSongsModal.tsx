@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
-import Alert from '@/components/Alert';
+import TooltipAlert from '@/components/TooltipAlert';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
@@ -78,7 +78,7 @@ const TopSongsModal: React.FC<TopSongsModalProps> = ({ show, topSongs, artistNam
         <div className="flex justify-between mt-4 relative">
           <div className="flex relative">
             {alertVisible && (
-              <Alert
+              <TooltipAlert
                 message="Top songs copied to clipboard!"
                 onClose={() => setAlertVisible(false)}
               />

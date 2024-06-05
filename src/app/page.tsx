@@ -2,12 +2,15 @@
 
 import Head from 'next/head';
 import { useState } from 'react';
+import Navbar from '@/components/Navbar';
 import SongFetcher from '@/components/SongFetcher';
 import LyricsModal from '@/components/LyricsModal';
 import ArtistTopSongsFetcher from '@/components/ArtistTopSongsFetcher';
 import TopSongsModal from '@/components/TopSongsModal';
+import Alert from '@/components/Alert';
 
 const Page = () => {
+  const [view, setView] = useState<string>('lyrics');
   const [fetchingLyrics, setFetchingLyrics] = useState(false);
   const [fetchingSongs, setFetchingSongs] = useState(false);
   const [lyrics, setLyrics] = useState<string[] | null>(null);
@@ -17,6 +20,11 @@ const Page = () => {
   const [showLyricsModal, setShowLyricsModal] = useState(false);
   const [showSongsModal, setShowSongsModal] = useState(false);
   const [loadingSongTitle, setLoadingSongTitle] = useState<string | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const handleNavClick = (view: string) => {
+    setView(view);
+  };
 
   const handleFetchLyrics = async (artistName: string, songTitle: string) => {
     setFetchingLyrics(true);
@@ -30,10 +38,11 @@ const Page = () => {
         setShowLyricsModal(true);
       } else {
         setLyrics(null);
-        console.error(data.error);
+        setAlertMessage('Artist or song not found');
       }
     } catch (error) {
       console.error('Failed to fetch lyrics:', error);
+      setAlertMessage('Failed to fetch lyrics. Please try again later.');
     } finally {
       setFetchingLyrics(false);
       setLoadingSongTitle(null);
@@ -52,10 +61,11 @@ const Page = () => {
         setShowSongsModal(true);
       } else {
         setTopSongs(null);
-        console.error(data.error);
+        setAlertMessage('Artist not found');
       }
     } catch (error) {
       console.error('Failed to fetch top songs:', error);
+      setAlertMessage('Failed to fetch top songs. Please try again later.');
     } finally {
       setFetchingSongs(false);
     }
@@ -71,24 +81,31 @@ const Page = () => {
     setShowSongsModal(true);  // Show the top songs modal again when closing lyrics modal
   };
 
+  const handleCloseAlert = () => {
+    setAlertMessage(null);
+  };
+
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-black text-white min-h-screen">
       <Head>
         <title>{artistName && songTitle ? `${artistName} - ${songTitle}` : "Fetch Lyrics and Top Songs"}</title>
         <meta name="description" content="Fetch song lyrics and top songs from Genius API" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="p-4">
-        <div className="flex justify-between">
-          <div className="w-1/2 border p-4">
-            <h1 className="text-2xl font-bold mb-4">Fetch Song Lyrics</h1>
+      <Navbar onNavClick={handleNavClick} currentView={view} />
+      <main className="p-4 flex-1 flex justify-center">
+        {view === 'lyrics' && (
+          <div className="w-1/2 p-4">
+            <h1 className="text-2xl font-bold mb-4">Fetch Individual Song Lyrics</h1>
             <SongFetcher onFetchLyrics={handleFetchLyrics} fetchingLyrics={fetchingLyrics} />
           </div>
-          <div className="w-1/2 border p-4">
-            <h1 className="text-2xl font-bold mb-4">Fetch Top Songs</h1>
+        )}
+        {view === 'topSongs' && (
+          <div className="w-1/2 p-4">
+            <h1 className="text-2xl font-bold mb-4">Fetch the Top Songs for an Artist</h1>
             <ArtistTopSongsFetcher onFetchTopSongs={handleFetchTopSongs} fetchingSongs={fetchingSongs} />
           </div>
-        </div>
+        )}
         {showLyricsModal && lyrics && (
           <LyricsModal
             show={showLyricsModal}
@@ -107,6 +124,9 @@ const Page = () => {
             loadingSongTitle={loadingSongTitle}
             onClose={() => setShowSongsModal(false)}
           />
+        )}
+        {alertMessage && (
+          <Alert message={alertMessage} onClose={handleCloseAlert} />
         )}
       </main>
     </div>

@@ -1,20 +1,25 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { Button } from './ui/button';
 
 interface AlertProps {
   message: string;
-  duration?: number; // Duration in milliseconds
   onClose: () => void;
 }
 
-const Alert: React.FC<AlertProps> = ({ message, duration = 2000, onClose }) => {
-  useEffect(() => {
-    const timer = setTimeout(onClose, duration);
-    return () => clearTimeout(timer);
-  }, [duration, onClose]);
-
+const Alert: React.FC<AlertProps> = ({ message, onClose }) => {
   return (
-    <div className="absolute bottom-full left-1/6 transform -translate-x-1/2 mb-2 bg-gray-800 text-white px-4 py-2 rounded shadow-lg z-50">
-      {message}
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+        <h2 className="text-xl font-bold text-black mb-4">Alert</h2>
+        <p className="mb-4 text-black">{message}</p>
+        <Button
+        variant="default"
+          onClick={onClose}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          OK
+        </Button>
+      </div>
     </div>
   );
 };
