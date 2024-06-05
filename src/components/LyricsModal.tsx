@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
-import Alert from '@/components/Alert'; // Adjust the import path according to your project structure
+import Alert from '@/components/Alert';
 
 interface LyricsModalProps {
   show: boolean;
@@ -40,7 +40,7 @@ const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, son
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60"
       onClick={onClose}
     >
       <div

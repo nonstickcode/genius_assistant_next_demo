@@ -5,21 +5,22 @@ import { useState } from 'react';
 import SongFetcher from '@/components/SongFetcher';
 import LyricsModal from '@/components/LyricsModal';
 import ArtistTopSongsFetcher from '@/components/ArtistTopSongsFetcher';
+import TopSongsModal from '@/components/TopSongsModal';
 
 const Page = () => {
   const [fetchingLyrics, setFetchingLyrics] = useState(false);
   const [fetchingSongs, setFetchingSongs] = useState(false);
   const [lyrics, setLyrics] = useState<string[] | null>(null);
-  const [topSongs, setTopSongs] = useState<any[] | null>(null);
+  const [topSongs, setTopSongs] = useState<{ title: string, url: string }[] | null>(null);
   const [artistName, setArtistName] = useState<string>('');
   const [songTitle, setSongTitle] = useState<string>('');
   const [showLyricsModal, setShowLyricsModal] = useState(false);
+  const [showSongsModal, setShowSongsModal] = useState(false);
+  const [loadingSongTitle, setLoadingSongTitle] = useState<string | null>(null);
 
   const handleFetchLyrics = async (artistName: string, songTitle: string) => {
     setFetchingLyrics(true);
-    setArtistName(artistName);
-    setSongTitle(songTitle);
-
+    setLoadingSongTitle(songTitle);
     try {
       const response = await fetch(`/api/genius/fetch-single-song?artistName=${encodeURIComponent(artistName)}&songTitle=${encodeURIComponent(songTitle)}`);
       const data = await response.json();
@@ -34,6 +35,7 @@ const Page = () => {
       console.error('Failed to fetch lyrics:', error);
     } finally {
       setFetchingLyrics(false);
+      setLoadingSongTitle(null);
     }
   };
 
@@ -46,6 +48,7 @@ const Page = () => {
       const data = await response.json();
       if (response.ok) {
         setTopSongs(data.topSongs);
+        setShowSongsModal(true);
       } else {
         setTopSongs(null);
         console.error(data.error);
@@ -57,17 +60,28 @@ const Page = () => {
     }
   };
 
+  const handleSongClick = (songTitle: string) => {
+    handleFetchLyrics(artistName, songTitle);
+  };
+
   return (
-    <div className="flex">
+    <div className="flex flex-col">
       <Head>
         <title>{artistName && songTitle ? `${artistName} - ${songTitle}` : "Fetch Lyrics and Top Songs"}</title>
         <meta name="description" content="Fetch song lyrics and top songs from Genius API" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Fetch Song Lyrics and Top Songs</h1>
-        <SongFetcher onFetchLyrics={handleFetchLyrics} fetchingLyrics={fetchingLyrics} />
-        <ArtistTopSongsFetcher onFetchTopSongs={handleFetchTopSongs} fetchingSongs={fetchingSongs} />
+        <div className="flex justify-between">
+          <div className="w-1/2 border p-4">
+            <h1 className="text-2xl font-bold mb-4">Fetch Song Lyrics</h1>
+            <SongFetcher onFetchLyrics={handleFetchLyrics} fetchingLyrics={fetchingLyrics} />
+          </div>
+          <div className="w-1/2 border p-4">
+            <h1 className="text-2xl font-bold mb-4">Fetch Top Songs</h1>
+            <ArtistTopSongsFetcher onFetchTopSongs={handleFetchTopSongs} fetchingSongs={fetchingSongs} />
+          </div>
+        </div>
         {lyrics && (
           <LyricsModal
             show={showLyricsModal}
@@ -78,18 +92,14 @@ const Page = () => {
           />
         )}
         {topSongs && (
-          <div className="mt-5">
-            <h2 className="text-xl font-bold">Top 10 Songs by {artistName}</h2>
-            <ul className="list-disc pl-5">
-              {topSongs.map((song, index) => (
-                <li key={index}>
-                  <a href={song.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-                    {song.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <TopSongsModal
+            show={showSongsModal}
+            topSongs={topSongs}
+            artistName={artistName}
+            onSongClick={handleSongClick}
+            loadingSongTitle={loadingSongTitle}
+            onClose={() => setShowSongsModal(false)}
+          />
         )}
       </main>
     </div>
