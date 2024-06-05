@@ -21,6 +21,7 @@ const Page = () => {
   const handleFetchLyrics = async (artistName: string, songTitle: string) => {
     setFetchingLyrics(true);
     setLoadingSongTitle(songTitle);
+
     try {
       const response = await fetch(`/api/genius/fetch-single-song?artistName=${encodeURIComponent(artistName)}&songTitle=${encodeURIComponent(songTitle)}`);
       const data = await response.json();
@@ -60,8 +61,14 @@ const Page = () => {
     }
   };
 
-  const handleSongClick = (songTitle: string) => {
-    handleFetchLyrics(artistName, songTitle);
+  const handleSongClick = async (songTitle: string) => {
+    await handleFetchLyrics(artistName, songTitle);
+    setShowSongsModal(false);
+  };
+
+  const handleCloseLyricsModal = () => {
+    setShowLyricsModal(false);
+    setShowSongsModal(true);  // Show the top songs modal again when closing lyrics modal
   };
 
   return (
@@ -82,16 +89,16 @@ const Page = () => {
             <ArtistTopSongsFetcher onFetchTopSongs={handleFetchTopSongs} fetchingSongs={fetchingSongs} />
           </div>
         </div>
-        {lyrics && (
+        {showLyricsModal && lyrics && (
           <LyricsModal
             show={showLyricsModal}
             lyrics={lyrics}
             artistName={artistName}
             songTitle={songTitle}
-            onClose={() => setShowLyricsModal(false)}
+            onClose={handleCloseLyricsModal}
           />
         )}
-        {topSongs && (
+        {showSongsModal && topSongs && (
           <TopSongsModal
             show={showSongsModal}
             topSongs={topSongs}

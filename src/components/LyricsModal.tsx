@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,17 @@ interface LyricsModalProps {
 
 const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, songTitle, onClose }) => {
   const [alertVisible, setAlertVisible] = useState(false);
+
+  useEffect(() => {
+    if (show) {
+      // Slight delay to ensure the modal is fully visible before hiding others
+      setTimeout(() => {
+        document.getElementById('top-songs-modal')?.classList.add('hidden');
+      }, 100);
+    } else {
+      document.getElementById('top-songs-modal')?.classList.remove('hidden');
+    }
+  }, [show]);
 
   const downloadLyrics = () => {
     const element = document.createElement("a");
