@@ -19,39 +19,42 @@ const SongFetcher: React.FC<SongFetcherProps> = ({ onFetchLyrics, fetchingLyrics
   };
 
   return (
-    <div className="mt-5 flex flex-col gap-4">
-      <input
-        type="text"
-        placeholder="Artist Name"
-        value={artistName}
-        onChange={(e) => setArtistName(e.target.value)}
-        className="p-2 border border-white text-white bg-black font-bold rounded"
-      />
-      <input
-        type="text"
-        placeholder="Song Title"
-        value={songTitle}
-        onChange={(e) => setSongTitle(e.target.value)}
-        className="p-2 border border-white text-white bg-black font-bold rounded"
-      />
-      <Button
-        onClick={handleFetchLyrics}
-        size="lg"
-        className="bg-white text-black hover:bg-gray-300"
-        disabled={fetchingLyrics}
-      >
-        {fetchingLyrics ? (
-          <>
-            <FontAwesomeIcon icon={faSpinner} className="animate-spin mr-2" />
-            Fetching Lyrics...
-          </>
-        ) : (
-          <>
-            <FontAwesomeIcon icon={faMusic} className="mr-2" />
-            Fetch Lyrics
-          </>
-        )}
-      </Button>
+    <div className="flex items-center justify-center h-screen">
+      <div className="flex flex-col gap-4 w-120">
+      <h1 className="text-2xl font-bold mb-4">Fetch Individual Song Lyrics</h1>
+        <input
+          type="text"
+          placeholder="Artist Name"
+          value={artistName}
+          onChange={(e) => setArtistName(e.target.value)}
+          className="p-2 border border-white text-white bg-black font-bold rounded w-full"
+        />
+        <input
+          type="text"
+          placeholder="Song Title"
+          value={songTitle}
+          onChange={(e) => setSongTitle(e.target.value)}
+          className="p-2 border border-white text-white bg-black font-bold rounded w-full"
+        />
+        <Button
+          onClick={handleFetchLyrics}
+          size="lg"
+          className="bg-white text-black hover:bg-gray-300 w-full"
+          disabled={fetchingLyrics}
+        >
+          {fetchingLyrics ? (
+            <div className="flex items-center justify-center relative">
+              <FontAwesomeIcon icon={faSpinner} className="animate-spin mr-2 absolute left-2" />
+              Fetching Lyrics...
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <FontAwesomeIcon icon={faMusic} className="mr-2" />
+              Fetch Lyrics
+            </div>
+          )}
+        </Button>
+      </div>
     </div>
   );
 };

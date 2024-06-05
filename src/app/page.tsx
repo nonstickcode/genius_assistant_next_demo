@@ -10,7 +10,7 @@ import TopSongsModal from '@/components/TopSongsModal';
 import Alert from '@/components/Alert';
 
 const Page = () => {
-  const [view, setView] = useState<string>('lyrics');
+  const [view, setView] = useState<string>('topSongs');
   const [fetchingLyrics, setFetchingLyrics] = useState(false);
   const [fetchingSongs, setFetchingSongs] = useState(false);
   const [lyrics, setLyrics] = useState<string[] | null>(null);
@@ -95,14 +95,12 @@ const Page = () => {
       <Navbar onNavClick={handleNavClick} currentView={view} />
       <main className="p-4 flex-1 flex justify-center">
         {view === 'lyrics' && (
-          <div className="w-1/2 p-4">
-            <h1 className="text-2xl font-bold mb-4">Fetch Individual Song Lyrics</h1>
+          <div className="p-4">
             <SongFetcher onFetchLyrics={handleFetchLyrics} fetchingLyrics={fetchingLyrics} />
           </div>
         )}
         {view === 'topSongs' && (
-          <div className="w-1/2 p-4">
-            <h1 className="text-2xl font-bold mb-4">Fetch the Top Songs for an Artist</h1>
+          <div className="p-4">
             <ArtistTopSongsFetcher onFetchTopSongs={handleFetchTopSongs} fetchingSongs={fetchingSongs} />
           </div>
         )}

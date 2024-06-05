@@ -12,14 +12,14 @@ const Navbar: React.FC<NavbarProps> = ({ onNavClick, currentView }) => {
       <Button
         variant="ghost"
         onClick={() => onNavClick('topSongs')}
-        className={`hover:bg-black hover:text-white hover:font-extrabold text-xl ${currentView === 'topSongs' ? 'text-green-500' : ''}`}
+        className={`hover:bg-black hover:text-white hover:font-extrabold text-xl ${currentView === 'topSongs' ? 'underline' : ''}`}
       >
         Fetch Top Songs
       </Button>
       <Button
         variant="ghost"
         onClick={() => onNavClick('lyrics')}
-        className={`hover:bg-black hover:text-white hover:font-extrabold text-xl ${currentView === 'lyrics' ? 'text-green-500' : ''}`}
+        className={`hover:bg-black hover:text-white hover:font-extrabold text-xl ${currentView === 'lyrics' ? 'underline' : ''}`}
       >
         Fetch Song Lyrics
       </Button>
