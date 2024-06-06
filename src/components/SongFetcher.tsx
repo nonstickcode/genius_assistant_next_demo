@@ -24,7 +24,7 @@ const SongFetcher: React.FC<SongFetcherProps> = ({
 
   return (
     <div className="flex items-center justify-center w-full h-full">
-      <div className="flex flex-col gap-4 w-full sm:w-4/5 md:w-3/4 lg:w-[500px] xl:w-[500px]  p-4 border border-gray rounded-lg">
+      <div className="flex flex-col gap-4 sm:w-4/5 md:w-4/5 lg:w-[500px] xl:w-[500px] p-4 border border-gray rounded-lg">
         <h1 className="text-2xl font-bold mb-4">
           Fetch Individual Song Lyrics
         </h1>
