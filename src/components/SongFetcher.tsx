@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMusic, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input'; // Ensure this import path matches your project structure
 
 interface SongFetcherProps {
   onFetchLyrics: (artistName: string, songTitle: string) => void;
@@ -19,18 +20,16 @@ const SongFetcher: React.FC<SongFetcherProps> = ({ onFetchLyrics, fetchingLyrics
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="flex flex-col gap-4 w-120">
-      <h1 className="text-2xl font-bold mb-4">Fetch Individual Song Lyrics</h1>
-        <input
-          type="text"
+    <div className="flex items-center border border-gray p-20 w-120 rounded-lg justify-center h-fit">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-2xl font-bold mb-4">Fetch Individual Song Lyrics</h1>
+        <Input
           placeholder="Artist Name"
           value={artistName}
           onChange={(e) => setArtistName(e.target.value)}
           className="p-2 border border-white text-white bg-black font-bold rounded w-full"
         />
-        <input
-          type="text"
+        <Input
           placeholder="Song Title"
           value={songTitle}
           onChange={(e) => setSongTitle(e.target.value)}
