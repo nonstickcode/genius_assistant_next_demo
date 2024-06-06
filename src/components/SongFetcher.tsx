@@ -23,8 +23,8 @@ const SongFetcher: React.FC<SongFetcherProps> = ({
   };
 
   return (
-    <div className="flex items-center border border-gray p-20 w-120 rounded-lg justify-center h-fit">
-      <div className="flex flex-col gap-4">
+    <div className="flex items-center justify-center w-full h-full">
+      <div className="flex flex-col gap-4 w-full sm:w-4/5 md:w-3/4 lg:w-[500px] xl:w-[500px]  p-4 border border-gray rounded-lg">
         <h1 className="text-2xl font-bold mb-4">
           Fetch Individual Song Lyrics
         </h1>
@@ -47,11 +47,8 @@ const SongFetcher: React.FC<SongFetcherProps> = ({
           disabled={fetchingLyrics}
         >
           {fetchingLyrics ? (
-            <div className="flex items-center justify-center relative">
-              <FontAwesomeIcon
-                icon={faSpinner}
-                className="animate-spin mr-2 absolute left-2"
-              />
+            <div className="flex items-center justify-center">
+              <FontAwesomeIcon icon={faSpinner} className="animate-spin mr-2" />
               Fetching Lyrics...
             </div>
           ) : (
