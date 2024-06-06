@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMusic, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input'; // Ensure this import path matches your project structure
+import { Input } from '@/components/ui/input';
 
 interface SongFetcherProps {
   onFetchLyrics: (artistName: string, songTitle: string) => void;

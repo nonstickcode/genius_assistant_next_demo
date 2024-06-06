@@ -10,7 +10,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input'; // Ensure this import path matches your project structure
+import { Input } from '@/components/ui/input';
 
 interface ArtistTopSongsFetcherProps {
   onFetchTopSongs: (artistName: string, numberOfSongs: number) => void;
