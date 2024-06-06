@@ -12,7 +12,13 @@ interface LyricsModalProps {
   onClose: () => void;
 }
 
-const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, songTitle, onClose }) => {
+const LyricsModal: React.FC<LyricsModalProps> = ({
+  show,
+  lyrics,
+  artistName,
+  songTitle,
+  onClose,
+}) => {
   const [alertVisible, setAlertVisible] = useState(false);
 
   useEffect(() => {
@@ -27,8 +33,8 @@ const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, son
   }, [show]);
 
   const downloadLyrics = () => {
-    const element = document.createElement("a");
-    const file = new Blob([lyrics.join("\n")], { type: "text/plain" });
+    const element = document.createElement('a');
+    const file = new Blob([lyrics.join('\n')], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = `${artistName} - ${songTitle} Lyrics.txt`;
     document.body.appendChild(element);
@@ -36,14 +42,14 @@ const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, son
   };
 
   const copyLyricsToClipboard = () => {
-    const textToCopy = lyrics.join("\n");
+    const textToCopy = lyrics.join('\n');
     navigator.clipboard
       .writeText(textToCopy)
       .then(() => {
         setAlertVisible(true);
       })
       .catch((err) => {
-        console.error("Failed to copy lyrics: ", err);
+        console.error('Failed to copy lyrics: ', err);
       });
   };
 
@@ -89,10 +95,7 @@ const LyricsModal: React.FC<LyricsModalProps> = ({ show, lyrics, artistName, son
               <span className="ml-2">Download Lyrics</span>
             </Button>
           </div>
-          <Button
-            onClick={onClose}
-            variant="destructive"
-          >
+          <Button onClick={onClose} variant="destructive">
             Close
           </Button>
         </div>

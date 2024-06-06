@@ -11,7 +11,10 @@ interface SongFetcherProps {
   fetchingLyrics: boolean;
 }
 
-const SongFetcher: React.FC<SongFetcherProps> = ({ onFetchLyrics, fetchingLyrics }) => {
+const SongFetcher: React.FC<SongFetcherProps> = ({
+  onFetchLyrics,
+  fetchingLyrics,
+}) => {
   const [artistName, setArtistName] = useState('');
   const [songTitle, setSongTitle] = useState('');
 
@@ -22,7 +25,9 @@ const SongFetcher: React.FC<SongFetcherProps> = ({ onFetchLyrics, fetchingLyrics
   return (
     <div className="flex items-center border border-gray p-20 w-120 rounded-lg justify-center h-fit">
       <div className="flex flex-col gap-4">
-        <h1 className="text-2xl font-bold mb-4">Fetch Individual Song Lyrics</h1>
+        <h1 className="text-2xl font-bold mb-4">
+          Fetch Individual Song Lyrics
+        </h1>
         <Input
           placeholder="Artist Name"
           value={artistName}
@@ -43,7 +48,10 @@ const SongFetcher: React.FC<SongFetcherProps> = ({ onFetchLyrics, fetchingLyrics
         >
           {fetchingLyrics ? (
             <div className="flex items-center justify-center relative">
-              <FontAwesomeIcon icon={faSpinner} className="animate-spin mr-2 absolute left-2" />
+              <FontAwesomeIcon
+                icon={faSpinner}
+                className="animate-spin mr-2 absolute left-2"
+              />
               Fetching Lyrics...
             </div>
           ) : (

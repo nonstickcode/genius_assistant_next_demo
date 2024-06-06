@@ -17,14 +17,21 @@ export async function GET(req: NextRequest) {
 
   try {
     // Search for the artist by name
-    const artistSearchResponse = await fetch(`https://api.genius.com/search?q=${encodeURIComponent(artistName)}`, {
-      headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`
+    const artistSearchResponse = await fetch(
+      `https://api.genius.com/search?q=${encodeURIComponent(artistName)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+        },
       }
-    });
+    );
 
     const artistSearchData = await artistSearchResponse.json();
-    const artist = artistSearchData.response.hits.find(hit => hit.result.primary_artist.name.toLowerCase() === artistName.toLowerCase());
+    const artist = artistSearchData.response.hits.find(
+      (hit) =>
+        hit.result.primary_artist.name.toLowerCase() ===
+        artistName.toLowerCase()
+    );
 
     if (!artist) {
       return NextResponse.json({ error: 'Artist not found' }, { status: 404 });
@@ -33,17 +40,20 @@ export async function GET(req: NextRequest) {
     const artistId = artist.result.primary_artist.id;
 
     // Fetch top songs for the artist
-    const songsResponse = await fetch(`https://api.genius.com/artists/${artistId}/songs?sort=popularity&per_page=${numberOfSongs}`, {
-      headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`
+    const songsResponse = await fetch(
+      `https://api.genius.com/artists/${artistId}/songs?sort=popularity&per_page=${numberOfSongs}`,
+      {
+        headers: {
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+        },
       }
-    });
+    );
 
     const songsData = await songsResponse.json();
     const topSongs = songsData.response.songs.map((song) => ({
       title: song.title,
       url: song.url,
-      thumbnail: song.song_art_image_thumbnail_url
+      thumbnail: song.song_art_image_thumbnail_url,
     }));
 
     return NextResponse.json({ topSongs }, { status: 200 });

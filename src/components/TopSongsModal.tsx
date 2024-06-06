@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy, faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCopy,
+  faDownload,
+  faSpinner,
+} from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
 import TooltipAlert from '@/components/TooltipAlert';
 import JSZip from 'jszip';
@@ -8,7 +12,7 @@ import { saveAs } from 'file-saver';
 
 interface TopSongsModalProps {
   show: boolean;
-  topSongs: { title: string, url: string }[];
+  topSongs: { title: string; url: string }[];
   artistName: string;
   onSongClick: (songTitle: string) => void;
   loadingSongTitle: string | null;
@@ -16,29 +20,45 @@ interface TopSongsModalProps {
 }
 
 const capitalize = (str: string) => {
-  return str.replace(/\b\w/g, char => char.toUpperCase());
+  return str.replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
-const TopSongsModal: React.FC<TopSongsModalProps> = ({ show, topSongs, artistName, onSongClick, loadingSongTitle, onClose }) => {
+const TopSongsModal: React.FC<TopSongsModalProps> = ({
+  show,
+  topSongs,
+  artistName,
+  onSongClick,
+  loadingSongTitle,
+  onClose,
+}) => {
   const [alertVisible, setAlertVisible] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const downloadTopSongsLyrics = async () => {
     setIsDownloading(true);
     const zip = new JSZip();
-    const lyricsFolder = zip.folder(`${capitalize(artistName)} Top Song Lyrics`);
+    const lyricsFolder = zip.folder(
+      `${capitalize(artistName)} Top Song Lyrics`
+    );
 
     try {
       await Promise.all(
         topSongs.map(async (song) => {
-          const response = await fetch(`/api/genius/fetch-single-song?artistName=${encodeURIComponent(artistName)}&songTitle=${encodeURIComponent(song.title)}`);
+          const response = await fetch(
+            `/api/genius/fetch-single-song?artistName=${encodeURIComponent(artistName)}&songTitle=${encodeURIComponent(song.title)}`
+          );
           const data = await response.json();
-          const lyrics = response.ok ? data.lyrics.join("\n") : "Lyrics not found";
-          lyricsFolder.file(`${song.title}.txt`, `Title: ${song.title}\n\n${lyrics}`);
+          const lyrics = response.ok
+            ? data.lyrics.join('\n')
+            : 'Lyrics not found';
+          lyricsFolder.file(
+            `${song.title}.txt`,
+            `Title: ${song.title}\n\n${lyrics}`
+          );
         })
       );
 
-      const content = await zip.generateAsync({ type: "blob" });
+      const content = await zip.generateAsync({ type: 'blob' });
       saveAs(content, `${capitalize(artistName)} Top Songs Lyrics.zip`);
     } catch (error) {
       console.error('Failed to fetch lyrics for all songs: ', error);
@@ -48,14 +68,16 @@ const TopSongsModal: React.FC<TopSongsModalProps> = ({ show, topSongs, artistNam
   };
 
   const copyTopSongsToClipboard = () => {
-    const textToCopy = topSongs.map((song, index) => `${index + 1}. ${song.title}`).join("\n");
+    const textToCopy = topSongs
+      .map((song, index) => `${index + 1}. ${song.title}`)
+      .join('\n');
     navigator.clipboard
       .writeText(textToCopy)
       .then(() => {
         setAlertVisible(true);
       })
       .catch((err) => {
-        console.error("Failed to copy top songs: ", err);
+        console.error('Failed to copy top songs: ', err);
       });
   };
 
@@ -116,7 +138,10 @@ const TopSongsModal: React.FC<TopSongsModalProps> = ({ show, topSongs, artistNam
             >
               {isDownloading ? (
                 <>
-                  <FontAwesomeIcon icon={faSpinner} className="animate-spin mr-2" />
+                  <FontAwesomeIcon
+                    icon={faSpinner}
+                    className="animate-spin mr-2"
+                  />
                   Downloading...
                 </>
               ) : (
@@ -127,10 +152,7 @@ const TopSongsModal: React.FC<TopSongsModalProps> = ({ show, topSongs, artistNam
               )}
             </Button>
           </div>
-          <Button
-            onClick={onClose}
-            variant="destructive"
-          >
+          <Button onClick={onClose} variant="destructive">
             Close
           </Button>
         </div>

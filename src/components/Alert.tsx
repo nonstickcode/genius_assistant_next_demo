@@ -13,7 +13,7 @@ const Alert: React.FC<AlertProps> = ({ message, onClose }) => {
         <h2 className="text-xl font-bold text-black mb-4">Alert</h2>
         <p className="mb-4 text-black">{message}</p>
         <Button
-        variant="default"
+          variant="default"
           onClick={onClose}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >

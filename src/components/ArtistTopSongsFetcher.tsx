@@ -4,7 +4,12 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMusic, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
-import { Select, SelectTrigger, SelectContent, SelectItem } from '@/components/ui/select';
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
 import { Input } from '@/components/ui/input'; // Ensure this import path matches your project structure
 
 interface ArtistTopSongsFetcherProps {
@@ -12,7 +17,10 @@ interface ArtistTopSongsFetcherProps {
   fetchingSongs: boolean;
 }
 
-const ArtistTopSongsFetcher: React.FC<ArtistTopSongsFetcherProps> = ({ onFetchTopSongs, fetchingSongs }) => {
+const ArtistTopSongsFetcher: React.FC<ArtistTopSongsFetcherProps> = ({
+  onFetchTopSongs,
+  fetchingSongs,
+}) => {
   const [artistName, setArtistName] = useState('');
   const [numberOfSongs, setNumberOfSongs] = useState(20); // Default to 20 songs
 
@@ -23,7 +31,9 @@ const ArtistTopSongsFetcher: React.FC<ArtistTopSongsFetcherProps> = ({ onFetchTo
   return (
     <div className="flex items-center border border-gray p-20 w-120 rounded-lg justify-center h-fit">
       <div className="flex flex-col gap-4">
-        <h1 className="text-2xl font-bold mb-4">Fetch the Top Songs for an Artist</h1>
+        <h1 className="text-2xl font-bold mb-4">
+          Fetch the Top Songs for an Artist
+        </h1>
         <Input
           placeholder="Artist Name"
           value={artistName}
@@ -53,7 +63,10 @@ const ArtistTopSongsFetcher: React.FC<ArtistTopSongsFetcherProps> = ({ onFetchTo
         >
           {fetchingSongs ? (
             <div className="flex items-center justify-center relative">
-              <FontAwesomeIcon icon={faSpinner} className="animate-spin mr-2 absolute left-2" />
+              <FontAwesomeIcon
+                icon={faSpinner}
+                className="animate-spin mr-2 absolute left-2"
+              />
               Fetching Top Songs...
             </div>
           ) : (

@@ -23,7 +23,6 @@ const Navbar: React.FC<NavbarProps> = ({ onNavClick, currentView }) => {
       >
         Fetch Song Lyrics
       </Button>
-      
     </nav>
   );
 };
