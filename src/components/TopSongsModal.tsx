@@ -37,24 +37,25 @@ const TopSongsModal: React.FC<TopSongsModalProps> = ({
   const downloadTopSongsLyrics = async () => {
     setIsDownloading(true);
     const zip = new JSZip();
-    const lyricsFolder = zip.folder(
-      `${capitalize(artistName)} Top Song Lyrics`
-    );
+    const lyricsFolder = zip.folder(`${capitalize(artistName)} Top Song Lyrics`);
+
+    if (!lyricsFolder) {
+      console.error('Failed to create lyrics folder in zip file.');
+      setIsDownloading(false);
+      return;
+    }
 
     try {
       await Promise.all(
         topSongs.map(async (song) => {
           const response = await fetch(
-            `/api/genius/fetch-single-song?artistName=${encodeURIComponent(artistName)}&songTitle=${encodeURIComponent(song.title)}`
+            `/api/genius/fetch-single-song?artistName=${encodeURIComponent(
+              artistName
+            )}&songTitle=${encodeURIComponent(song.title)}`
           );
           const data = await response.json();
-          const lyrics = response.ok
-            ? data.lyrics.join('\n')
-            : 'Lyrics not found';
-          lyricsFolder.file(
-            `${song.title}.txt`,
-            `Title: ${song.title}\n\n${lyrics}`
-          );
+          const lyrics = response.ok ? data.lyrics.join('\n') : 'Lyrics not found';
+          lyricsFolder.file(`${song.title}.txt`, `Title: ${song.title}\n\n${lyrics}`);
         })
       );
 
@@ -92,7 +93,9 @@ const TopSongsModal: React.FC<TopSongsModalProps> = ({
         className="bg-white p-8 rounded-lg max-w-4xl w-full mx-auto relative"
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
       >
-        <h2 className="text-3xl mb-4 font-bold text-black">{`Top ${topSongs.length} Songs by ${capitalize(artistName)}`}</h2>
+        <h2 className="text-3xl mb-4 font-bold text-black">{`Top ${topSongs.length} Songs by ${capitalize(
+          artistName
+        )}`}</h2>
         <div className="overflow-y-auto max-h-96 text-black text-lg">
           {topSongs.map((song, index) => (
             <div key={index} className="flex items-center">
